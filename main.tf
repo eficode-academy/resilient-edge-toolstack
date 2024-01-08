@@ -5,11 +5,11 @@ terraform {
   required_providers {
     talos = {
       source  = "siderolabs/talos"
-      version = "0.1.1"
+      version = "0.4.0"
     }
     kubectl = {
       source  = "gavinbunney/kubectl"
-      version = ">= 1.7.0"
+      version = "1.14.0"
     }
   }
 }

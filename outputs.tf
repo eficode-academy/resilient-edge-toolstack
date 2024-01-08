@@ -1,5 +1,5 @@
 output "machineconfig_controlplane" {
-  value     = talos_machine_configuration_controlplane.machineconfig_cp.machine_config
+  value     = data.talos_machine_configuration.machineconfig_cp.machine_configuration
   sensitive = true
 }
 
@@ -9,11 +9,11 @@ output "machineconfig_controlplane" {
 # }
 
 output "talosconfig" {
-  value     = talos_client_configuration.talosconfig.talos_config
+  value     = data.talos_client_configuration.talosconfig.talos_config
   sensitive = true
 }
 
 output "kubeconfig" {
-  value     = talos_cluster_kubeconfig.kubeconfig.kube_config
+  value     = data.talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
   sensitive = true
 }
