@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/daniellrr/python-hello.git'
-    path: /k8s_manifests
+    path: k8s_manifests/
     targetRevision: HEAD
   syncPolicy:
     automated:
