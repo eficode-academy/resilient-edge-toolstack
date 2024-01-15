@@ -3,12 +3,3 @@ machine:
     disk: ${install_disk}
   network:
     hostname: ${hostname}
-  kubelet:
-    extraMounts:
-      - destination: /var/mnt
-        type: bind
-        source: /var/mnt
-        options:
-          - bind
-          - rshared
-          - rw
