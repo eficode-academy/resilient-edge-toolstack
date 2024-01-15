@@ -1,13 +1,13 @@
 provider "kubectl" {
-  config_path = "configs/kubeconfig"
+  config_path = "./configs/kubeconfig"
 }
 
 data "kubectl_file_documents" "namespace" {
-    content = file("./argocd/namespace.yaml")
+    content = file("argocd/k8s_manifests/namespace.yaml")
 } 
 
 data "kubectl_file_documents" "argocd" {
-    content = file("./argocd/install.yaml")
+    content = file("argocd/k8s_manifests/install.yaml")
 }
 
 resource "kubectl_manifest" "namespace" {

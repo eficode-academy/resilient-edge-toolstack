@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello-python-argocd
+  namespace: argocd
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: applications
+  project: default
+  source:
+    repoURL: 'https://github.com/daniellrr/python-hello.git'
+    path: /k8s_manifests
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - Validate=false
+  syncWave:
+    automated: 1
+  health: {}
+  patchResource:
+    - kind: Deployment
+      group: apps
+      version: v1
+      patch: '{"spec": {"template": {"metadata": {"annotations": {"argocd.argoproj.io/sync-wave": "1"}}}}}'
+  autoSync:
+    selfHeal: true
+  auto: true

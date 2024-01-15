@@ -9,7 +9,7 @@ terraform {
     }
     kubectl = {
       source  = "gavinbunney/kubectl"
-      version = ">= 1.7.0"
+      version = "1.14.0"
     }
   }
 }
@@ -23,3 +23,11 @@ provider "talos" {}
 #     command = "/bin/bash scripts/install-boot-script.sh ${var.activation_key}"
 #   }
 # }
+
+module "argo_module" {
+  source   = "./argocd"
+}
+
+module "local_storage" {
+  source   = "./local_storage_provider"
+}
