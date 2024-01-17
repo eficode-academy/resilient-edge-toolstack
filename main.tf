@@ -1,33 +1,26 @@
 terraform {
   required_version = ">= 0.13"
-  #experiments = [module_variable_optional_attrs]
 
   required_providers {
     talos = {
       source  = "siderolabs/talos"
       version = "0.1.1"
     }
-    kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = "1.14.0"
-    }
   }
 }
 
 provider "talos" {}
 
-
-# resource "null_resource" "register_device" {
-
-#   provisioner "local-exec" {
-#     command = "/bin/bash scripts/install-boot-script.sh ${var.activation_key}"
-#   }
-# }
-
 module "argo_module" {
   source   = "./argocd"
+
+  kubeconfig_content = talos_cluster_kubeconfig.kubeconfig.kube_config
+  tal_bootstrap_complete = talos_machine_bootstrap.bootstrap.id
 }
 
 module "local_storage" {
   source   = "./local_storage_provider"
+
+  kubeconfig_content = talos_cluster_kubeconfig.kubeconfig.kube_config
+  tal_bootstrap_complete = talos_machine_bootstrap.bootstrap.id
 }

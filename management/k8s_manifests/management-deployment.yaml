@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: management-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: management
+  template:
+    metadata:
+      labels:
+        app: management
+    spec:
+      containers:
+      - name: management-container
+        image: danielrcode/management:latest

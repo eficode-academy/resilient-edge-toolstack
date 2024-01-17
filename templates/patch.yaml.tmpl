@@ -3,3 +3,10 @@ machine:
     disk: ${install_disk}
   network:
     hostname: ${hostname}
+  features:
+    kubernetesTalosAPIAccess:
+      enabled: true
+      allowedRoles:
+        - os:reader
+      allowedKubernetesNamespaces:
+        - management

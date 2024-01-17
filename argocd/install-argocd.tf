@@ -1,26 +1,19 @@
-provider "kubectl" {
-  config_path = "./configs/kubeconfig"
-}
-
-data "kubectl_file_documents" "namespace" {
-    content = file("argocd/k8s_manifests/namespace.yaml")
-} 
-
-data "kubectl_file_documents" "argocd" {
-    content = file("argocd/k8s_manifests/install.yaml")
-}
-
-resource "kubectl_manifest" "namespace" {
-    count     = length(data.kubectl_file_documents.namespace.documents)
-    yaml_body = element(data.kubectl_file_documents.namespace.documents, count.index)
-    override_namespace = "argocd"
-}
-
-resource "kubectl_manifest" "argocd" {
-    depends_on = [
-      kubectl_manifest.namespace,
-    ]
-    count     = length(data.kubectl_file_documents.argocd.documents)
-    yaml_body = element(data.kubectl_file_documents.argocd.documents, count.index)
-    override_namespace = "argocd"
+resource "null_resource" "cluster_readiness_check" {
+  triggers = {
+    bootstrap_complete = var.tal_bootstrap_complete
+  }
+  # A simple script that checks the readiness of the Kubernetes cluster
+  provisioner "local-exec" {
+    command = <<EOF
+      #!/bin/bash
+      until kubectl --kubeconfig="${path.module}/../configs/kubeconfig" get nodes | grep -m 1 'Ready'; do 
+        echo 'Waiting for Kubernetes cluster to be ready...'
+        sleep 15
+      done
+      kubectl --kubeconfig="${path.module}/../configs/kubeconfig" apply -n argocd -f ${path.module}/k8s_manifests/namespace.yaml
+      kubectl --kubeconfig="${path.module}/../configs/kubeconfig" apply -n argocd -f ${path.module}/k8s_manifests/install.yaml
+      kubectl --kubeconfig="${path.module}/../configs/kubeconfig" apply -n argocd -f ${path.module}/applications_manifests/
+    EOF
+    interpreter = ["/bin/bash", "-c"]
+  }
 }
