@@ -1,0 +1,13 @@
+---
+
+cluster_name: "edgek8s"
+talos_version: "v1.4.1"
+kubernetes_version: "v1.26.0"
+controlplane_ips: ["192.168.1.2"]
+talos_config_dir: "talos_output"
+install_disk: "/dev/vda"
+
+config_dir: "{{ role_path }}/../../../talos_output"
+
+
+#worker_ips: ["192.168.1.20", "192.168.1.21"]

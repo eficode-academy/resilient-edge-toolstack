@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: management-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: management
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: management
+    spec:
+      containers:
+      - image: danielrcode/management:latest
+        imagePullPolicy: IfNotPresent
+        name: management-container
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/run/secrets/talos.dev
+          name: talos-secrets
+        - mountPath: /opt/kubeconfig
+          name: kubeconfig-volume
+        - mountPath: /opt/talosconfig
+          name: talosconfig-volume
+      volumes:
+      - name: talos-secrets
+        secret:
+          secretName: management-deployment-talos-secrets
+      - name: kubeconfig-volume
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-secret
+      - name: talosconfig-volume
+        secret:
+          defaultMode: 420
+          secretName: talosconfig-secret
+status: {}
+---
+apiVersion: talos.dev/v1alpha1
+kind: ServiceAccount
+metadata:
+    name: management-deployment-talos-secrets
+spec:
+    roles:
+        - os:reader
+---
+

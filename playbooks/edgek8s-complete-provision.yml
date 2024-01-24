@@ -1,0 +1,9 @@
+---
+# Main playbook
+
+- name: Create file using a role
+  hosts: localhost
+  roles:
+    - talos-provision
+    - argocd-provision
+    - management-provision

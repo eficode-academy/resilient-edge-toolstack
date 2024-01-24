@@ -1,0 +1,32 @@
+---
+
+- name: Create namespace for Argo CD
+  kubernetes.core.k8s:
+    kubeconfig: "{{ config_dir }}/kubeconfig"
+    name: argocd
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Create applications namespace
+  kubernetes.core.k8s:
+    kubeconfig: "{{ config_dir }}/kubeconfig"
+    name: applications
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Deploy Argo CD
+  kubernetes.core.k8s:
+    kubeconfig: "{{ config_dir }}/kubeconfig"
+    namespace: argocd
+    state: present
+    src: "{{ role_path }}/manifests/install.yaml"
+    wait: true
+
+- name: Deploy Argo CD App of Apps
+  kubernetes.core.k8s:
+    kubeconfig: "{{ config_dir }}/kubeconfig"
+    namespace: argocd
+    state: present
+    src: "{{ role_path }}/manifests/argocd-apps.yaml"

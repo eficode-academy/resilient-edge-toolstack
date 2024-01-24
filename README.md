@@ -1,3 +1,27 @@
+
+
+# tested using image below
+
+docker run -it -v /Users/danielr/work/k8s-edge-ansible:/k8s-edge-ansible devture/ansible:latest
+
+```kubectl get pods -n argocd --kubeconfig=configs/kubeconfig```
+
+ArgoCD can be accessed on the link after port forwarding 
+
+```kubectl port-forward svc/argocd-server -n argocd 8080:443 -n argocd --kubeconfig=configs/kubeconfig``` 
+
+and the credentials to access are present in the secret argocd-initial-admin-secret. These credentials need to be updated after the first login, and this would be a manual process. 
+
+You can retrieve the password using the command below:
+
+```kubectl --kubeconfig=configs/kubeconfig -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo```
+
+
+ansible-playbook playbooks/edgek8s-complete-provision.yml
+
+
+############################################################################### OLD DOCS BELOW
+
 # k8s-talos-terraform
 
 ## Information:

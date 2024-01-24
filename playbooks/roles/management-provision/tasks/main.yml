@@ -1,0 +1,59 @@
+---
+
+- name: Base64 encode kubeconfig and talosconfig
+  shell: base64 -w 0 -i {{ config_dir }}/{{ item }}
+  register: encoded_files
+  loop:
+    - kubeconfig
+    - talosconfig
+  changed_when: false
+
+# - name: Debug encoded files
+#   ansible.builtin.debug:
+#     var: encoded_files
+
+
+- name: Create Kubernetes secret manifest for each file
+  template:
+    src: secret_template.yaml.j2
+    dest: "{{ config_dir }}/{{ item }}-secret.yaml"
+  loop:
+    - kubeconfig
+    - talosconfig
+  vars:
+    encoded_files: "{{ encoded_files.results }}"
+
+- name: Create namespace management
+  kubernetes.core.k8s:
+    kubeconfig: "{{ config_dir }}/kubeconfig"
+    name: management
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Apply secret manifests to the management namespace
+  kubernetes.core.k8s:
+    kubeconfig: "{{ config_dir }}/kubeconfig"
+    namespace: management
+    src: "{{ item }}"
+    state: present
+  loop:
+    - "{{ config_dir }}/kubeconfig-secret.yaml"
+    - "{{ config_dir }}/talosconfig-secret.yaml"
+
+# - name: Apply secret manifests to the management namespace
+#   kubernetes.core.k8s:
+#     kubeconfig: "{{ config_dir }}/kubeconfig"
+#     namespace: management
+#     src: "{{ role_path }}/templates/management-deployment.yaml"
+#     state: present
+#     wait: true
+
+
+
+
+
+  
+
+
+

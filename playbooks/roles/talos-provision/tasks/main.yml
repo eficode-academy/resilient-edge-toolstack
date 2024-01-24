@@ -1,0 +1,66 @@
+---
+
+- name: generate controlplane patch
+  copy:
+    content: |
+      cluster:
+        allowSchedulingOnControlPlanes: true
+      machine:
+        install:
+          disk: {{ install_disk }}
+        network:
+          hostname: {{ cluster_name }}
+        features:
+          kubernetesTalosAPIAccess:
+            enabled: true
+            allowedRoles:
+              - os:reader
+            allowedKubernetesNamespaces:
+              - management
+    dest: "{{ config_dir }}/controlplane.patch"
+  delegate_to: localhost
+
+- name: Generate Talos configuration
+  command: >
+    talosctl gen config {{ cluster_name }} https://{{ controlplane_ips[0] }}:6443
+    --output-dir {{ config_dir }}
+    --config-patch-control-plane "@{{ config_dir }}/controlplane.patch" --force
+  delegate_to: localhost
+  args:
+    creates: "{{ talos_config_dir }}/controlplane.yaml"
+
+- name: Apply Talos configuration to controlplane nodes
+  command: >
+    talosctl apply-config --insecure --nodes {{ item }} 
+    --file {{ config_dir }}/controlplane.yaml
+  delegate_to: localhost
+  loop: "{{ controlplane_ips }}"
+
+- name: Check health of cluster
+  command: >
+    talosctl dmesg --talosconfig={{ config_dir }}/talosconfig --nodes {{ controlplane_ips[0] }} -e {{ controlplane_ips[0] }}
+  register: talos_health
+  until: '"etcd is waiting to join the cluster" in talos_health.stdout'
+  retries: 50
+  delay: 10
+
+- name: Bootstrap the Kubernetes cluster
+  command: >
+    talosctl bootstrap --nodes {{ controlplane_ips[0] }} -e {{ controlplane_ips[0] }} --talosconfig={{ config_dir }}/talosconfig
+  delegate_to: localhost
+
+- name: Waiting for kubernetes cluster to become ready
+  command: >
+    talosctl dmesg --talosconfig={{ config_dir }}/talosconfig --nodes {{ controlplane_ips[0] }} -e {{ controlplane_ips[0] }}
+  register: talos_health
+  until: '"boot sequence: done" in talos_health.stdout'
+  retries: 50
+  delay: 10
+
+- name: Get inital kubeconfig
+  command: >
+    talosctl kubeconfig {{ config_dir }}/kubeconfig --nodes {{ controlplane_ips[0] }} --endpoints {{ controlplane_ips[0] }} --talosconfig={{ config_dir }}/talosconfig
+  delegate_to: localhost
+
+  
+

@@ -1,4 +1,0 @@
-configs/*
-github-secret.yaml
-terraform.tfstate.*
-kubectl*
