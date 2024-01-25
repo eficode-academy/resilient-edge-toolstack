@@ -12,7 +12,6 @@
   debug:
     msg: "Desired talos_version is {{ talos_version }} and installed talosctl version is {{ talosctl_installed_version }} talos download {{ talosctl_download_url }}"
 
-
 - name: Download specified version of talosctl if versions do not match
   get_url:
     url: "{{ talosctl_download_url }}"
