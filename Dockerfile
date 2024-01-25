@@ -10,3 +10,5 @@ RUN apk add --no-cache \
         openssl
 
 RUN curl -sL https://talos.dev/install | sh
+
+RUN ansible-galaxy install -r requirements.yml
