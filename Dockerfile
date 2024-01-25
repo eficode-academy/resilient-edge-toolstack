@@ -11,4 +11,4 @@ RUN apk add --no-cache \
 
 RUN curl -sL https://talos.dev/install | sh
 
-RUN ansible-galaxy install -r requirements.yml
+RUN ansible-galaxy collection install kubernetes.core
