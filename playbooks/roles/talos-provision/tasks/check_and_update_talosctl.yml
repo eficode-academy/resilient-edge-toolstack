@@ -1,0 +1,33 @@
+- name: Check installed version of talosctl
+  command: talosctl version --client
+  register: talosctl_version_output
+  ignore_errors: yes
+
+- name: Set fact for talosctl installed version
+  set_fact:
+    talosctl_installed_version: "{{ talosctl_version_output.stdout | regex_search('Tag:\\s+(v[\\d\\.]+)', '\\1') | first }}"
+  when: talosctl_version_output.rc == 0
+
+- name: Debug talos_version and talosctl_installed_version
+  debug:
+    msg: "Desired talos_version is {{ talos_version }} and installed talosctl version is {{ talosctl_installed_version }} talos download {{ talosctl_download_url }}"
+
+
+- name: Download specified version of talosctl if versions do not match
+  get_url:
+    url: "{{ talosctl_download_url }}"
+    dest: "/usr/local/bin/talosctl"
+    mode: '0755'
+    force: yes
+  when: talosctl_installed_version is not defined or talosctl_installed_version != talos_version
+  become: yes
+
+- name: Verify updated talosctl version
+  command: talosctl version --client
+  register: updated_talosctl_version_output
+  when: talosctl_installed_version is not defined or talosctl_installed_version != talos_version
+
+- name: Show updated talosctl version
+  debug:
+    msg: "{{ updated_talosctl_version_output.stdout }}"
+  when: talosctl_installed_version is not defined or talosctl_installed_version != talos_version

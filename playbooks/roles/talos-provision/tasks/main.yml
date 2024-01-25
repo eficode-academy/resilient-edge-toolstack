@@ -1,10 +1,27 @@
 ---
 
+- name: Ensure talosctl is at the desired version
+  import_tasks: check_and_update_talosctl.yml
+
+- name: Create config directory
+  ansible.builtin.file:
+    path: "{{ config_dir }}"
+    state: directory
+    mode: '0755'
+
 - name: generate controlplane patch
   copy:
     content: |
       cluster:
         allowSchedulingOnControlPlanes: true
+        apiServer:
+          admissionControl:
+            - name: PodSecurity
+              configuration:
+                defaults:
+                  audit: privileged
+                  enforce: privileged
+                  warn: privileged
       machine:
         install:
           disk: {{ install_disk }}

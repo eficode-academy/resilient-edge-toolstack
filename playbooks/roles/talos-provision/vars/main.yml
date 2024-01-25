@@ -2,12 +2,17 @@
 
 cluster_name: "edgek8s"
 talos_version: "v1.4.1"
-kubernetes_version: "v1.26.0"
-controlplane_ips: ["192.168.1.2"]
-talos_config_dir: "talos_output"
-install_disk: "/dev/vda"
+
+controlplane_ips: ["192.168.1.109"]
+
+install_disk: "/dev/sda"
+
+talosctl_download_url: "https://github.com/siderolabs/talos/releases/download/{{ talos_version }}/talosctl-linux-amd64"
 
 config_dir: "{{ role_path }}/../../../talos_output"
 
+######### BELOW VARIABLES ARE NOT USED #############
 
 #worker_ips: ["192.168.1.20", "192.168.1.21"]
+#kubernetes_version: "v1.26.0"
+#talos_config_dir: "talos_output"

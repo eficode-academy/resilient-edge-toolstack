@@ -8,11 +8,6 @@
     - talosconfig
   changed_when: false
 
-# - name: Debug encoded files
-#   ansible.builtin.debug:
-#     var: encoded_files
-
-
 - name: Create Kubernetes secret manifest for each file
   template:
     src: secret_template.yaml.j2
@@ -40,14 +35,6 @@
   loop:
     - "{{ config_dir }}/kubeconfig-secret.yaml"
     - "{{ config_dir }}/talosconfig-secret.yaml"
-
-# - name: Apply secret manifests to the management namespace
-#   kubernetes.core.k8s:
-#     kubeconfig: "{{ config_dir }}/kubeconfig"
-#     namespace: management
-#     src: "{{ role_path }}/templates/management-deployment.yaml"
-#     state: present
-#     wait: true
 
 
 

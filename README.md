@@ -19,6 +19,10 @@ You can retrieve the password using the command below:
 
 ansible-playbook playbooks/edgek8s-complete-provision.yml
 
+docker run -it -v /Users/danielr/work/k8s-edge-ansible:/k8s-edge-ansible eficode-academy/edge-k8s-ansible-provision:latest ansible-playbook playbooks/edgek8s-complete-provision.yml
+
+talosctl -n 192.168.1.109 disks --insecure
+
 
 ############################################################################### OLD DOCS BELOW
 

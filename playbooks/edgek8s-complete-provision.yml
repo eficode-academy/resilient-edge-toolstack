@@ -1,7 +1,7 @@
 ---
 # Main playbook
 
-- name: Create file using a role
+- name: Provision edge K8S
   hosts: localhost
   roles:
     - talos-provision
