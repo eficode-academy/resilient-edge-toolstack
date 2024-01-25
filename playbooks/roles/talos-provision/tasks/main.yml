@@ -44,7 +44,7 @@
     --config-patch-control-plane "@{{ config_dir }}/controlplane.patch" --force
   delegate_to: localhost
   args:
-    creates: "{{ talos_config_dir }}/controlplane.yaml"
+    creates: "{{ config_dir }}/controlplane.yaml"
 
 - name: Apply Talos configuration to controlplane nodes
   command: >
