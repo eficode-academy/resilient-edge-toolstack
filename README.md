@@ -26,7 +26,7 @@ Note: Your host & the host you're deploying talos on needs to be able to reach e
 
 Make sure to change the value of the variable ```controlplane_ips``` (playbooks/roles/talos-provision/vars/main.yml) to the IP of the host talos is being deployed to, multiple hosts are currently not supported.
 
-```docker run -it -v /Users/danielr/work/k8s-edge-infra:/k8s-edge-infra danielrcode/edge-k8s-ansible-provision:latest /bin/sh -c "cd k8s-edge-infra && ansible-playbook playbooks/edgek8s-complete-provision.yml"```
+```docker run -it -v /Users/danielr/work/k8s-edge-infra:/k8s-edge-infra eficode-academy/edgek8s-provision:latest /bin/sh -c "cd k8s-edge-infra && ansible-playbook playbooks/edgek8s-complete-provision.yml"```
 
 Make sure that the path to the repo is correct in the volume mounted, change the left part (by the -v flag in the docker command) of the path to match the path to the repo on your localhost.
 
