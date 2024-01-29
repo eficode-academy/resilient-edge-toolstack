@@ -5,12 +5,12 @@ on:
     branches:
       - main
     paths:
-      - 'upgrade_edge/Dockerfile'
+      - 'upgrade_edge/**'
   pull_request:
     branches:
       - main
     paths:
-      - 'upgrade_edge/Dockerfile'
+      - 'upgrade_edge/**'
   workflow_dispatch:
 
 jobs:
