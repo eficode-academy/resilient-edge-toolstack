@@ -36,6 +36,6 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./upgrade_edge/Dockerfile
+        file: upgrade_edge/Dockerfile
         push: true
         tags: ghcr.io/${{ github.repository_owner }}/edgek8s-upgrade:latest
