@@ -9,6 +9,10 @@
 
 if [[ "$UPGRADE_KUBERNETES" == "true" ]] || [[ "$UPGRADE_TALOS" == "true" && -n $TALOS_VERSION ]]; then
   echo "None of the variables UPGRADE_KUBERNETES or UPGRADE_TALOS has been set to true (true as a string, not a boolean), exiting without any upgrading"
+  echo $UPGRADE_KUBERENTES
+  echo $UPGRADE_TALOS
+  echo $TALOS_VERSION
+  exit 0
 fi
 
 check_talos_version_existence() {
