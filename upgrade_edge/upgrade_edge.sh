@@ -7,7 +7,7 @@
       #TALOS_VERSION="v1.5.5"
       #UPGRADE_KUBERENTES="true"
 
-if [[ "$UPGRADE_KUBERNETES" == "true" ]] || [[ "$UPGRADE_TALOS" == "true" ]]; then
+if [[ "$UPGRADE_KUBERNETES" == "true" ]] || [[ "$UPGRADE_TALOS" == "true" && -n $TALOS_VERSION ]]; then
   echo "None of the variables UPGRADE_KUBERNETES or UPGRADE_TALOS has been set to true (true as a string, not a boolean), exiting without any upgrading"
 fi
 
