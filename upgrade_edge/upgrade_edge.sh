@@ -5,8 +5,9 @@
       SERVER_IP="192.168.1.109"
       #UPGRADE_TALOS="true"
       #TALOS_VERSION="v1.5.5"
-      #UPGRADE_KUBERENTES="true"
+     # UPGRADE_KUBERENTES="true"
 
+ echo $UPGRADE_KUBERNETES
 if [ "$UPGRADE_KUBERNETES" != "true" ] && [ "$UPGRADE_TALOS" != "true" ]; then
   echo "None of the variables UPGRADE_KUBERNETES or UPGRADE_TALOS has been set to true (true as a string, not a boolean), exiting without any upgrading"
   echo $UPGRADE_KUBERENTES
@@ -76,14 +77,14 @@ upgrade_kubernetes() {
     ./talosctl-"${server_version}" -n $SERVER_IP -e $SERVER_IP upgrade-k8s --to $NEXT_VERSION
 }
 
-if [ "$UPGRADE_TALOS" = "true" ] && [ "$UPGRADE_KUBERENTES" = "true" ] ; then
+if [ "$UPGRADE_TALOS" = "true" ] && [ "$UPGRADE_KUBERNETES" = "true" ] ; then
     echo "Cannot upgrade both Talos and Kubernetes at the same time."
     exit 0
 elif [ "$UPGRADE_TALOS" = "true" ]; then
     check_talos_version_existence
     check_talosctl_version
     upgrade_talos
-elif [ "$UPGRADE_KUBERENTES" = "true" ]; then
+elif [ "$UPGRADE_KUBERNETES" = "true" ]; then
     check_talosctl_version
     get_current_k8s_version
     upgrade_kubernetes
