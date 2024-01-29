@@ -20,6 +20,10 @@ Steps to perform:
 
 2. Run the ansible-playbook in the docker container
 
+Build the Dockerfile provided locally, this docker image is to be used as a provision image, the dot at the end is important
+
+```docker build -t eficode-academy/edgek8s-provision:latest .``` 
+
 Note: If talosctl apply-config fails with the error that the defined install_disk doesn't exist, run ```talosctl -n <controlplane_ip> disks --insecure``` to see what disks are available, see docs https://www.talos.dev/v1.6/introduction/getting-started/#modifying-the-machine-configs standard predefined in the playbook is /dev/sda but can differ.
 
 Note: Your host & the host you're deploying talos on needs to be able to reach eachother. 
