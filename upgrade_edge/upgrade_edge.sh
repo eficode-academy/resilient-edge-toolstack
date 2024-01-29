@@ -76,14 +76,14 @@ upgrade_kubernetes() {
     ./talosctl-"${server_version}" -n $SERVER_IP -e $SERVER_IP upgrade-k8s --to $NEXT_VERSION
 }
 
-if [ "$UPGRADE_TALOS" = "true" ] && [ "$UPGRADE_KUBERENTES" = "true" ] ; then
+if [ "$UPGRADE_TALOS" == "true" ] && [ "$UPGRADE_KUBERENTES" == "true" ] ; then
     echo "Cannot upgrade both Talos and Kubernetes at the same time."
     exit 0
-elif [ "$UPGRADE_TALOS" = "true" ]; then
+elif [ "$UPGRADE_TALOS" == "true" ]; then
     check_talos_version_existence
     check_talosctl_version
     upgrade_talos
-elif [ "$UPGRADE_KUBERENTES" = "true" ]; then
+elif [ "$UPGRADE_KUBERENTES" == "true" ]; then
     check_talosctl_version
     get_current_k8s_version
     upgrade_kubernetes
