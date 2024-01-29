@@ -1,4 +1,4 @@
- #!/bin/sh
+ #!/bin/bash
       
       KUBECONFIG="/opt/kubeconfig/kubeconfig"
       TALOSCONFIG="/opt/talosconfig/talosconfig"
