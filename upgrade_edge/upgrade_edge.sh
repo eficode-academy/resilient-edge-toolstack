@@ -7,7 +7,7 @@
       #TALOS_VERSION="v1.5.5"
       #UPGRADE_KUBERENTES="true"
 
-if [[ "$UPGRADE_KUBERNETES" != "true" ]] || { [[ "$UPGRADE_TALOS" != "true" ]] && [[ -z "$TALOS_VERSION" ]]; }; then
+if [[ "$UPGRADE_KUBERNETES" != "true" ]] || [[ "$UPGRADE_TALOS" != "true" ]] ; then
   echo "None of the variables UPGRADE_KUBERNETES or UPGRADE_TALOS has been set to true (true as a string, not a boolean), exiting without any upgrading"
   echo $UPGRADE_KUBERENTES
   echo $UPGRADE_TALOS
@@ -78,7 +78,7 @@ upgrade_kubernetes() {
 
 if [ "$UPGRADE_TALOS" = "true" ] && [ "$UPGRADE_KUBERENTES" = "true" ]; then
     echo "Cannot upgrade both Talos and Kubernetes at the same time."
-    exit 1
+    exit 0
 elif [ "$UPGRADE_TALOS" = "true" ]; then
     check_talos_version_existence
     check_talosctl_version
