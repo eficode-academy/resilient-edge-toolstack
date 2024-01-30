@@ -66,6 +66,10 @@ get_current_k8s_version() {
     local major=$(echo $version_string | cut -d. -f1)
     local minor=$(echo $version_string | cut -d. -f2)
     local patch=$(echo $version_string | cut -d. -f3)
+
+    if [ $patch -gt 0 ]; then
+      patch=0
+    fi
     local next_minor=$((minor + 1))
     echo "${major}.${next_minor}.${patch}"
     NEXT_VERSION="${major}.${next_minor}.${patch}"
