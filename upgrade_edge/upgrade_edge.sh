@@ -2,7 +2,7 @@
       
       KUBECONFIG="/opt/kubeconfig/kubeconfig"
       TALOSCONFIG="/opt/talosconfig/talosconfig"
-      SERVER_IP="192.168.1.109"
+      SERVER_IP="192.168.1.111"
       #UPGRADE_TALOS="true"
       #TALOS_VERSION="v1.5.5"
      # UPGRADE_KUBERENTES="true"
