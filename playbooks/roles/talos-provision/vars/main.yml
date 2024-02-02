@@ -3,7 +3,7 @@
 cluster_name: "edgek8s"
 talos_version: "v1.4.1"
 
-controlplane_ips: ["192.168.1.109"]
+controlplane_ips: ["192.168.1.111"]
 
 install_disk: "/dev/sda"
 
