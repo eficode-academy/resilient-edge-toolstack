@@ -1,4 +1,4 @@
-# k8s-talos-ansible
+# Resilient Edge Toolstack "RET"
 
 ## Information:
 There are 2 Git repos:
@@ -12,33 +12,36 @@ An USB stick burned with ISO image of Talos Linux https://github.com/siderolabs/
 On your laptop:
 1. docker installed
 2. kubectl 1.26+ installed
-3. argocd cli 2.6+ installed
+
+## Gitops Repo setup
+
+The repository for your bootstrapped gitops repo is located at `playbooks/roles/argocd-provision/manifests/argocd-apps.yaml`
+
+## Installation
 
 Steps to perform:
 
-1. Boot the machine with Talos Linux using an USB stick. It should run in maintenance mode and display an IP.
+* Boot the machine with Talos Linux using an USB stick. It should run in maintenance mode and display an IP.
 
-2. Run the ansible-playbook in the docker container
+* Check the IP address of the machine and update the `playbooks/roles/talos-provision/vars/main.yml` file.
 
-Build the Dockerfile provided locally, this docker image is to be used as a provision image, the dot at the end is important
+* Make sure to change the value of the variable [controlplane_ips](playbooks/roles/talos-provision/vars/main.yml) to the IP of the host talos is being deployed to, multiple hosts are currently not supported.
 
-```docker build -t eficode-academy/edgek8s-provision:latest .``` 
+* Run the ansible-playbook in the docker container
 
-Note: If talosctl apply-config fails with the error that the defined install_disk doesn't exist, run ```talosctl -n <controlplane_ip> disks --insecure``` to see what disks are available, see docs https://www.talos.dev/v1.6/introduction/getting-started/#modifying-the-machine-configs standard predefined in the playbook is /dev/sda but can differ.
+> Note: If talosctl apply-config fails with the error that the defined install_disk doesn't exist, run ```talosctl -n <controlplane_ip> disks --insecure``` to see what disks are available, see docs https://www.talos.dev/v1.6/introduction/getting-started/#modifying-the-machine-configs standard predefined in the playbook is /dev/sda but can differ.
 
-Note: Your host & the host you're deploying talos on needs to be able to reach eachother. 
+> Note: Your host & the host you're deploying talos on needs to be able to reach eachother. 
 
-Make sure to change the value of the variable ```controlplane_ips``` (playbooks/roles/talos-provision/vars/main.yml) to the IP of the host talos is being deployed to, multiple hosts are currently not supported.
+```docker run -ti -v ${PWD}:/k8s-edge-infra -w /k8s-edge-infra ghcr.io/eficode-academy/edgek8s-provision:latest ansible-playbook playbooks/edgek8s-complete-provision.yml```
 
-```docker run -it -v /Users/danielr/work/k8s-edge-infra:/k8s-edge-infra ghcr.io/eficode-academy/edgek8s-provision:latest /bin/sh -c "cd k8s-edge-infra && ansible-playbook playbooks/edgek8s-complete-provision.yml"```
+> :bulb: You cloud add a userID that is equivalent to the user that is running the ansible-playbook in the docker container, this is to avoid permission issues when mounting the volume in the docker container.
 
 Make sure that the path to the repo is correct in the volume mounted, change the left part (by the -v flag in the docker command) of the path to match the path to the repo on your localhost.
 
-As part of the POC, we are running a single node cluster with one controlplane node which can schedule workloads. In the actual production setup, it would be a good idea to run the cluster with multiple controlplane nodes and worker nodes to maintain quorum.
+Once the ansible-playbook has completed you have a Talos K8s cluster running on the machine bootstrapped with Talos Linux running underneath. You should also see ArgoCD deployed and running in the argocd namespace. This enables the use of GitOps to manage your workload/applications from here.
 
-Once the ansible-playbook has completed you have a Talos K8s cluster running on the machine bootstrapped with Talos Linux running underneath. You should also see ArgoCD deployed and running in the argocd namespace. This enables the use of GitOps to manage your workload/applications.
-
-In the argo-provision role (```playbooks/roles/argo-provision/manifests```) there is an argocd application manifest which points to a gitops repository which contains a bunch of applications which will be deployed by argoCD automatically. This application deploys all manifests that are available in that repo https://github.com/eficode-academy/k8s-edge-gitops It could be customized further to fit your needs. The whole point is that everything should be managed from the gitops repository once the base infrastructure is in place.
+## Post Installation
 
 The kubeconfig & talosconfig are available under ```talos_output/``` after deployment
 
