@@ -84,8 +84,25 @@ upgrade_kubernetes() {
 # Upgrade Kubernetes
 upgrade_kubernetes_specific_version() {
 
-    echo "Upgrading Kubernetes to version $KUBERNETES_VERSION ..."
-    ./talosctl-"${server_version}" -n $SERVER_IP -e $SERVER_IP upgrade-k8s --to $KUBERNETES_VERSION
+#as long as the current version is lower than KUBERNETES_VERSION, we keep upgrading
+# parse KUBERNETES_VERSION to get the major, minor and patch versions
+    local major=$(echo $KUBERNETES_VERSION | cut -d. -f1)
+    local minor=$(echo $KUBERNETES_VERSION | cut -d. -f2)
+    local patch=$(echo $KUBERNETES_VERSION | cut -d. -f3)
+
+    # fetch the current version of the cluster
+    local current_version=$(kubectl get nodes -o jsonpath="{.items[0].status.nodeInfo.kubeletVersion}")
+    local current_major=$(echo $current_version | cut -d. -f1)
+    local current_minor=$(echo $current_version | cut -d. -f2)
+    local current_patch=$(echo $current_version | cut -d. -f3)
+
+    # check if the current version is lower than the target version
+    while [ $current_major -lt $major ] || [ $current_minor -lt $minor ] || [ $current_patch -lt $patch ]; do
+        echo "Upgrading Kubernetes..."
+        ./talosctl-"${server_version}" -n $SERVER_IP -e $SERVER_IP upgrade-k8s --to $KUBERNETES_VERSION
+        current_version=$(kubectl get nodes -o jsonpath="{.items[0].status.nodeInfo.kubeletVersion}")
+    done
+
 }
 
 if [ "$UPGRADE_TALOS" = "true" ] && [ "$UPGRADE_KUBERNETES" = "true" ] ; then
