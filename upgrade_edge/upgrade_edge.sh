@@ -78,8 +78,14 @@ get_current_k8s_version() {
 # Upgrade Kubernetes
 upgrade_kubernetes() {
 
-    echo "Upgrading Kubernetes to version $NEXT_VERSION..."
-    ./talosctl-"${server_version}" -n $SERVER_IP -e $SERVER_IP upgrade-k8s --to $NEXT_VERSION
+    echo "Upgrading Kubernetes..."
+    ./talosctl-"${server_version}" -n $SERVER_IP -e $SERVER_IP upgrade-k8s
+}
+# Upgrade Kubernetes
+upgrade_kubernetes_specific_version() {
+
+    echo "Upgrading Kubernetes to version $KUBERNETES_VERSION ..."
+    ./talosctl-"${server_version}" -n $SERVER_IP -e $SERVER_IP upgrade-k8s --to $KUBERNETES_VERSION
 }
 
 if [ "$UPGRADE_TALOS" = "true" ] && [ "$UPGRADE_KUBERNETES" = "true" ] ; then
@@ -93,5 +99,9 @@ elif [ "$UPGRADE_KUBERNETES" = "true" ]; then
     check_talos_version_existence
     check_talosctl_version
     get_current_k8s_version
-    upgrade_kubernetes
+    if [[ -z  "$KUBERNETES_VERSION" ]]; then #if it exists
+      upgrade_kubernetes_specific_version
+    else
+      upgrade_kubernetes
+    fi
 fi
