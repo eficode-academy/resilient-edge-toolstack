@@ -16,6 +16,14 @@
     kind: Namespace
     state: present
 
+- name: Deploy Argo CD configmap
+  kubernetes.core.k8s:
+    kubeconfig: "{{ config_dir }}/kubeconfig"
+    namespace: argocd
+    state: present
+    src: "{{ role_path }}/manifests/argocd-cm.yaml"
+    wait: true
+
 - name: Deploy Argo CD
   kubernetes.core.k8s:
     kubeconfig: "{{ config_dir }}/kubeconfig"
