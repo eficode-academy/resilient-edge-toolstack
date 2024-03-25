@@ -20,7 +20,7 @@ fi
 check_talos_version_existence() {
     local version_url="https://github.com/siderolabs/talos/releases/tag/${TALOS_VERSION}"
     if ! curl --output /dev/null --silent --head --fail "$version_url"; then
-        echo "Invalid Talos version: ${TALOS_VERSION}."
+        echo "Invalid Talos version specified in env variable: ${TALOS_VERSION}."
         exit 1
     fi
 }
