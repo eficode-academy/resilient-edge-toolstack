@@ -13,6 +13,9 @@
   copy:
     content: |
       cluster:
+        extraManifests:
+          - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
+          - https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
         allowSchedulingOnControlPlanes: true
         apiServer:
           admissionControl:
@@ -23,6 +26,9 @@
                   enforce: privileged
                   warn: privileged
       machine:
+        kubelet:
+          extraArgs:
+            rotate-server-certificates: true
         install:
           disk: {{ install_disk }}
         network:
