@@ -1,0 +1,31 @@
+FROM alpine:3.19.0
+
+RUN apk add --no-cache \
+        ca-certificates \
+        py3-kubernetes \
+        py3-yaml \
+        py3-jsonpatch \
+        curl \
+        wget \
+        openssl
+
+RUN wget https://github.com/siderolabs/talos/releases/download/v1.4.1/talosctl-linux-amd64 -O /usr/local/bin/talosctl-1.4.1 && \
+    chmod +x /usr/local/bin/talosctl-1.4.1
+RUN alias t41=/usr/local/bin/talosctl-1.4.1
+RUN wget https://github.com/siderolabs/talos/releases/download/v1.4.8/talosctl-linux-amd64 -O /usr/local/bin/talosctl-1.4.8 && \
+    chmod +x /usr/local/bin/talosctl-1.4.8
+RUN alias t48=/usr/local/bin/talosctl-1.4.8
+
+RUN wget https://github.com/siderolabs/talos/releases/download/v1.5.0/talosctl-linux-amd64 -O /usr/local/bin/talosctl-1.5.0 && \
+    chmod +x /usr/local/bin/talosctl-1.5.0
+RUN alias t50=/usr/local/bin/talosctl-1.5.0
+RUN wget https://github.com/siderolabs/talos/releases/download/v1.5.6/talosctl-linux-amd64 -O /usr/local/bin/talosctl-1.5.6 && \
+    chmod +x /usr/local/bin/talosctl-1.5.6
+RUN alias t56=/usr/local/bin/talosctl-1.5.6
+
+RUN wget https://github.com/siderolabs/talos/releases/download/v1.6.0/talosctl-linux-amd64 -O /usr/local/bin/talosctl-1.6.0 && \
+    chmod +x /usr/local/bin/talosctl-1.6.0
+RUN alias t60=/usr/local/bin/talosctl-1.6.0
+RUN wget https://github.com/siderolabs/talos/releases/download/v1.6.6/talosctl-linux-amd64 -O /usr/local/bin/talosctl-1.6.6 && \
+    chmod +x /usr/local/bin/talosctl-1.6.6
+RUN alias t66=/usr/local/bin/talosctl-1.6.6

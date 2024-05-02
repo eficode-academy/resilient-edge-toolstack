@@ -51,10 +51,20 @@ Check that kubectl resources are deployed as expected.
 
 ArgoCD can be accessed on the link after port forwarding 
 
-```kubectl port-forward svc/argocd-server -n argocd 8080:443 --kubeconfig=talos_outptu/kubeconfig``` 
+```kubectl port-forward svc/argocd-server -n argocd 8080:443 --kubeconfig=talos_output/kubeconfig``` 
 
 The credentials to access the ArgoCD GUI are present in the secret argocd-initial-admin-secret. These credentials need to be updated after the first login, and this would be a manual process. In a production environment the point is to never have to access the ArgoCD UI/CLI and instead have everything managed through in this case the https://github.com/eficode-academy/k8s-edge-gitops repo.
 
 You can retrieve the password using the command below:
 
 ```kubectl --kubeconfig=talos_output/kubeconfig -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo```
+
+
+## Talos commands:
+`docker run -ti -v ${PWD}:/k8s-edge-infra -w /k8s-edge-infra taloss`
+`talosctl-1.4.1 -n 192.168.1.109 -e 192.168.1.109 --talosconfig talos_output/talosconfig dashboard`
+`talosctl-1.4.8 -n 192.168.1.109 -e 192.168.1.109 --talosconfig talos_output/talosconfig dashboard`
+
+## look at the application:
+
+[app](http://192.168.1.109/hello-python)
