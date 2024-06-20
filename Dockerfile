@@ -1,4 +1,4 @@
-FROM alpine:3.19.0
+FROM alpine:latest
 
 RUN apk add --no-cache \
         ca-certificates \
@@ -7,7 +7,8 @@ RUN apk add --no-cache \
         py3-yaml \
         py3-jsonpatch \
         curl \
-        openssl
+        openssl \
+        helm
 
 RUN curl -sL https://talos.dev/install | sh
 
