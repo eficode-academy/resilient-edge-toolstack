@@ -8,7 +8,8 @@ RUN apk add --no-cache \
         py3-jsonpatch \
         curl \
         openssl \
-        helm
+        helm \
+        kubectl
 
 RUN curl -sL https://talos.dev/install | sh
 
